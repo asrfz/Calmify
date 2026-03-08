@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calmify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #f5f0eb;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            color: #333;
+        }
+
+        /* ───── Floating Logo ───── */
+
+        #logo {
+            position: fixed;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        #logo.pos-center {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -70%);
+        }
+
+        #logo.pos-corner {
+            top: 24px;
+            left: 28px;
+            transform: translate(0, 0) scale(0.55);
+            transform-origin: top left;
+        }
+
+        #logo.pos-center-up {
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #logo.pos-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 1.2s ease;
+        }
+
+        .logo-icon.c-purple { background: #b8a9c9; }
+        .logo-icon.c-coral  { background: #d4726a; }
+
+        .logo-name {
+            font-size: 42px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            color: #333;
+        }
+
+        .logo-name b { font-weight: 600; }
+
+        /* ───── Screens ───── */
+
+        .screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* ── 1 · Splash ── */
+
+        #splash { cursor: pointer; }
+
+        .powered-by {
+            margin-top: 90px;
+            font-size: 14px;
+            color: #bbb;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .powered-by strong {
+            font-weight: 500;
+            letter-spacing: 3px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        /* ── 2 · Home ── */
+
+        .ripple-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin-bottom: 44px;
+        }
+
+        .ripple-dot {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 22px; height: 22px;
+            background: #cec3d8;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .ripple-ring {
+            position: absolute;
+            top: 50%; left: 50%;
+            border: 1.5px solid #cec3d8;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: rippleOut 3s ease-out infinite;
+        }
+
+        @keyframes rippleOut {
+            0%   { width: 30px;  height: 30px;  opacity: 0.6; }
+            100% { width: 180px; height: 180px; opacity: 0; }
+        }
+
+        .home-text {
+            font-size: 30px;
+            font-weight: 300;
+            color: #b0b0b0;
+        }
+
+        .home-text .accent { color: #b8a9c9; font-weight: 400; }
+
+        .help-btn {
+            margin-top: 80px;
+            padding: 14px 38px;
+            border: none;
+            border-radius: 40px;
+            background: #cec3d8;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .help-btn:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 24px rgba(184,169,201,0.35);
+        }
+
+        /* ── 3 · Triggered ── */
+
+        .triggered-content {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .triggered-line {
+            font-size: 19px;
+            font-weight: 300;
+            color: #b0b0b0;
+            line-height: 2;
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .triggered-line.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .triggered-line .accent { color: #d4726a; font-weight: 400; }
+
+        /* ── 4 · Get Ready ── */
+
+        .getready-sub {
+            font-size: 20px;
+            font-weight: 300;
+            color: #c0c0c0;
+            margin-bottom: 8px;
+        }
+
+        .getready-main {
+            font-size: 26px;
+            font-weight: 400;
+            color: #555;
+        }
+
+        /* ── 5 · Squeeze ── */
+
+        .squeeze-title {
+            font-size: 46px;
+            font-weight: 400;
+            color: #333;
+            letter-spacing: 4px;
+            margin-bottom: 24px;
+        }
+
+        .gauge-wrap { margin-bottom: 4px; }
+
+        #needle-g {
+            transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+            transform-origin: 200px 185px;
+        }
+
+        .gauge-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 320px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: #aaa;
+            margin-top: 2px;
+        }
+
+        /* ── 6 · Complete ── */
+
+        .music-note {
+            font-size: 72px;
+            color: #333;
+            animation: notePulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes notePulse {
+            0%, 100% { transform: scale(1); opacity: 0.85; }
+            50%      { transform: scale(1.1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── Floating Logo ─── -->
+    <div id="logo" class="pos-center">
+        <div class="logo-icon c-purple">
+            <svg viewBox="0 0 40 40" fill="none" width="26" height="26">
+                <path d="M11 24 Q20 14 29 24" stroke="white" stroke-width="2.8"
+                      stroke-linecap="round" fill="none"/>
+            </svg>
+        </div>
+        <span class="logo-name">calm<b>ify</b></span>
+    </div>
+
+    <!-- ─── 1 · Splash ─── -->
+    <div id="splash" class="screen active">
+        <div class="powered-by">Powered by&nbsp;<strong>PRESAGE</strong></div>
+    </div>
+
+    <!-- ─── 2 · Home ─── -->
+    <div id="home" class="screen">
+        <div class="ripple-wrapper">
+            <div class="ripple-dot"></div>
+            <div class="ripple-ring"></div>
+            <div class="ripple-ring" style="animation-delay:1s"></div>
+        </div>
+        <p class="home-text">everything is <span class="accent">fine.</span></p>
+        <button class="help-btn">I need help</button>
+    </div>
+
+    <!-- ─── 3 · Triggered ─── -->
+    <div id="triggered" class="screen">
+        <div class="triggered-content">
+            <p class="triggered-line" id="tl1">it's okay to feel a lot right now.</p>
+            <p class="triggered-line" id="tl2">let's take a moment to <span class="accent">slow down.</span></p>
+        </div>
+    </div>
+
+    <!-- ─── 4 · Get Ready ─── -->
+    <div id="getready" class="screen">
+        <p class="getready-sub">get ready to</p>
+        <p class="getready-main">squeeze the stuffed animal</p>
+    </div>
+
+    <!-- ─── 5 · Squeeze ─── -->
+    <div id="squeeze" class="screen">
+        <h1 class="squeeze-title">squeeze</h1>
+        <div class="gauge-wrap">
+            <svg viewBox="0 0 400 210" width="370">
+                <defs>
+                    <linearGradient id="gg" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%"   stop-color="#d4726a"/>
+                        <stop offset="50%"  stop-color="#e8c547"/>
+                        <stop offset="100%" stop-color="#7ab648"/>
+                    </linearGradient>
+                </defs>
+                <path d="M 50 185 A 150 150 0 0 1 350 185"
+                      stroke="url(#gg)" stroke-width="22"
+                      fill="none" stroke-linecap="round"/>
+                <g id="needle-g">
+                    <line x1="200" y1="185" x2="68" y2="185"
+                          stroke="#222" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="68" cy="185" r="8" fill="#222"/>
+                </g>
+                <circle cx="200" cy="185" r="5" fill="#222"/>
+            </svg>
+        </div>
+        <div class="gauge-labels"><span>GENTLE</span><span>HARD</span></div>
+    </div>
+
+    <!-- ─── 6 · Complete ─── -->
+    <div id="complete" class="screen">
+        <div class="music-note">&#9834;</div>
+    </div>
+
+<script>
+(function () {
+    var logo     = document.getElementById('logo');
+    var logoIcon = document.querySelector('.logo-icon');
+    var needleG  = document.getElementById('needle-g');
+    var tl1      = document.getElementById('tl1');
+    var tl2      = document.getElementById('tl2');
+
+    var current = 'splash';
+    var started = false;
+    var polling = false;
+
+    function go(name) {
+        if (current === 'triggered') {
+            tl1.classList.remove('show');
+            tl2.classList.remove('show');
+        }
+
+        document.querySelectorAll('.screen').forEach(function (s) {
+            s.classList.remove('active');
+        });
+        document.getElementById(name).classList.add('active');
+        current = name;
+
+        switch (name) {
+            case 'splash':
+                logoPos('pos-center');
+                logoColor('c-purple');
+                break;
+            case 'home':
+                logoPos('pos-corner');
+                logoColor('c-purple');
+                break;
+            case 'triggered':
+                logoPos('pos-center-up');
+                logoColor('c-coral');
+                setTimeout(function () { tl1.classList.add('show'); }, 800);
+                setTimeout(function () { tl2.classList.add('show'); }, 1600);
+                break;
+            default:
+                logoPos('pos-hidden');
+        }
+
+        if (name === 'squeeze') setNeedle(0);
+    }
+
+    function logoPos(cls) {
+        logo.classList.remove('pos-center', 'pos-corner', 'pos-center-up', 'pos-hidden');
+        logo.classList.add(cls);
+    }
+
+    function logoColor(cls) {
+        logoIcon.classList.remove('c-purple', 'c-coral');
+        logoIcon.classList.add(cls);
+    }
+
+    function setNeedle(progress) {
+        var angle = Math.min(progress, 1) * 180;
+        needleG.style.transform = 'rotate(' + angle + 'deg)';
+    }
+
+    document.getElementById('splash').addEventListener('click', function () {
+        go('home');
+        if (!polling) { polling = true; poll(); }
+    });
+
+    document.querySelector('.help-btn').addEventListener('click', function () {
+        fetch('/trigger', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ triggered: true })
+        }).catch(function () {});
+    });
+
+    function poll() {
+        fetch('/state')
+            .then(function (r) { return r.json(); })
+            .then(function (d) { handle(d); })
+            .catch(function () {});
+        setTimeout(poll, 800);
+    }
+
+    function handle(d) {
+        if ((d.state === 'triggered' || d.state === 'grounding') && !started && current === 'home') {
+            started = true;
+            go('triggered');
+            setTimeout(function () { go('getready'); }, 5000);
+            setTimeout(function () { go('squeeze'); },  10000);
+        }
+
+        if (current === 'squeeze' && d.grip_count != null && d.grip_needed) {
+            setNeedle(d.grip_count / d.grip_needed);
+        }
+
+        if (d.state === 'complete' && current === 'squeeze') {
+            setNeedle(1);
+            setTimeout(function () { go('complete'); }, 1200);
+        }
+
+        if (d.state === 'idle' && started) {
+            started = false;
+            if (current !== 'splash' && current !== 'home') {
+                go('home');
+            }
+        }
+    }
+})();
+</script>
+</body>
+</html>

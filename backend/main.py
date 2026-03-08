@@ -1,9 +1,13 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from datetime import datetime
 import threading
 from elevenlabs_service import run_calming_sequence, precache_audio
 
 app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return send_file("frontend.html")
 
 session = {
     "state": "idle",
