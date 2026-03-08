@@ -1,19 +1,35 @@
-from flask import Flask, request, jsonify, send_file, send_from_directory
+from flask import Flask, request, jsonify, send_file, send_from_directory, Response
 from datetime import datetime
 import os
 from elevenlabs_service import precache_audio
 
-app = Flask(__name__, static_folder="audio_cache", static_url_path="/audio")
+app = Flask(__name__)
+
+AUDIO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "audio_cache")
 
 @app.route("/")
 def index():
     return send_file("frontend.html")
+
+@app.route("/audio/<filename>")
+def serve_audio(filename):
+    path = os.path.join(AUDIO_DIR, filename)
+    if not os.path.exists(path):
+        return "", 404
+    with open(path, "rb") as f:
+        data = f.read()
+    return Response(data, mimetype="audio/mpeg",
+                    headers={"Content-Length": str(len(data)),
+                             "Accept-Ranges": "none",
+                             "Cache-Control": "no-cache"})
 
 session = {
     "state": "idle",
     "grip_count": 0,
     "grip_needed": 14,
     "triggered_at": None,
+    "pulse": None,
+    "breathing": None,
 }
 
 @app.route("/trigger", methods=["POST"])
@@ -24,8 +40,10 @@ def trigger():
         session["state"] = "triggered"
         session["grip_count"] = 0
         session["triggered_at"] = datetime.now().isoformat()
+        session["pulse"] = data.get("pulse")
+        session["breathing"] = data.get("breathing")
 
-        print("OVERSTIMULATION DETECTED -- waiting for grounding exercise")
+        print(f"OVERSTIMULATION DETECTED -- pulse={session['pulse']} breathing={session['breathing']}")
 
     return jsonify({"ok": True, "state": session["state"]})
 
@@ -60,6 +78,8 @@ def reset():
     session["state"] = "idle"
     session["grip_count"] = 0
     session["triggered_at"] = None
+    session["pulse"] = None
+    session["breathing"] = None
     print("Session reset")
     return jsonify({"ok": True})
 

@@ -456,9 +456,6 @@
         <p id="play-label" style="margin-top:10px;font-size:13px;color:#bbb;font-weight:300;">tap to play soothing sounds</p>
     </div>
 
-    <audio id="bg-music" src="/audio/soothing_music.mp3" preload="auto" loop></audio>
-    <audio id="bg-voice" src="/audio/calming_message.mp3" preload="auto"></audio>
-
     <!-- ─── 7 · Agent Chat ─── -->
     <div id="agent-screen" class="screen">
         <div class="agent-header">
@@ -535,10 +532,6 @@
         needleG.style.transform = 'rotate(' + angle + 'deg)';
     }
 
-    var musicAudio = document.getElementById('bg-music');
-    var voiceAudio = document.getElementById('bg-voice');
-    musicAudio.volume = 0.3;
-
     document.getElementById('splash').addEventListener('click', function () {
         go('home');
         if (!polling) { polling = true; poll(); }
@@ -549,18 +542,23 @@
         btn.classList.add('playing');
         btn.innerHTML = '&#9646;&#9646;';
         document.getElementById('play-label').textContent = 'playing...';
-        musicAudio.currentTime = 0;
-        musicAudio.play();
+
+        var music = new Audio('/audio/soothing_music.mp3');
+        var voice = new Audio('/audio/calming_message.mp3');
+        music.volume = 0.3;
+        music.loop = true;
+        music.play();
+
         setTimeout(function () {
-            voiceAudio.currentTime = 0;
-            voiceAudio.play();
+            voice.play();
         }, 1500);
-        voiceAudio.onended = function () {
+
+        voice.addEventListener('ended', function () {
             setTimeout(function () {
-                musicAudio.pause();
+                music.pause();
                 go('agent-screen');
             }, 2000);
-        };
+        });
     });
 
     document.getElementById('start-talk').addEventListener('click', function () {
