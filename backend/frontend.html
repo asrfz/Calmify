@@ -349,8 +349,19 @@
             font-size: 20px;
         }
 
-        .book-btn {
+        .post-talk-btns {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
             margin-top: 28px;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .post-talk-btns.visible { opacity: 1; }
+
+        .book-btn, .treatment-btn {
             padding: 14px 36px;
             border: 2px solid #b8a9c9;
             border-radius: 40px;
@@ -364,10 +375,20 @@
             transition: all 0.2s ease;
         }
 
-        .book-btn:hover {
+        .book-btn:hover, .treatment-btn:hover {
             background: #b8a9c9;
             color: #fff;
             transform: scale(1.03);
+        }
+
+        .treatment-btn {
+            border-color: #7ab648;
+            color: #7ab648;
+        }
+
+        .treatment-btn:hover {
+            background: #7ab648;
+            color: #fff;
         }
 
         .booked-msg {
@@ -376,6 +397,26 @@
             font-weight: 300;
             color: #7ab648;
             display: none;
+        }
+
+        .done-talk-btn {
+            margin-top: 20px;
+            padding: 10px 28px;
+            border: none;
+            border-radius: 30px;
+            background: #ddd;
+            color: #777;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: none;
+        }
+
+        .done-talk-btn:hover {
+            background: #ccc;
+            color: #555;
         }
     </style>
 </head>
@@ -466,8 +507,12 @@
         <div class="agent-widget-container" id="agent-widget-wrap" style="display:none;">
             <elevenlabs-convai agent-id="agent_5601kk6df874eq0snhytmfwm3erq"></elevenlabs-convai>
         </div>
-        <button class="book-btn" id="book-btn">book appointment with a waterloo therapist</button>
-        <p class="booked-msg" id="booked-msg">&#10003; appointment request sent — a therapist will reach out soon.</p>
+        <button class="done-talk-btn" id="done-talk">i'm done talking</button>
+        <div class="post-talk-btns" id="post-talk-btns">
+            <button class="book-btn" id="book-btn">book appointment with a waterloo therapist</button>
+            <button class="treatment-btn" id="treatment-btn">view treatment options</button>
+            <p class="booked-msg" id="booked-msg">&#10003; appointment request sent — a therapist will reach out soon.</p>
+        </div>
     </div>
     <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 
@@ -564,6 +609,7 @@
     document.getElementById('start-talk').addEventListener('click', function () {
         this.style.display = 'none';
         document.getElementById('agent-widget-wrap').style.display = 'flex';
+        document.getElementById('done-talk').style.display = 'block';
         setTimeout(function () {
             var widget = document.querySelector('elevenlabs-convai');
             if (widget && widget.shadowRoot) {
@@ -573,9 +619,21 @@
         }, 500);
     });
 
+    document.getElementById('done-talk').addEventListener('click', function () {
+        this.style.display = 'none';
+        document.getElementById('agent-widget-wrap').style.display = 'none';
+        var btns = document.getElementById('post-talk-btns');
+        btns.style.display = 'flex';
+        setTimeout(function () { btns.classList.add('visible'); }, 50);
+    });
+
     document.getElementById('book-btn').addEventListener('click', function () {
         this.style.display = 'none';
         document.getElementById('booked-msg').style.display = 'block';
+    });
+
+    document.getElementById('treatment-btn').addEventListener('click', function () {
+        window.open('https://vivirion.com/', '_blank');
     });
 
     document.querySelector('.help-btn').addEventListener('click', function () {

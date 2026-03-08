@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SensAware">
 
+        <activity android:name=".BreathingActivity" />
         <activity android:name=".AlertActivity" />
         <activity android:name=".MonitoringActivity" />
 

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F0EB">
+
+    <TextView
+        android:id="@+id/breatheLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="140dp"
+        android:text="get ready..."
+        android:textColor="#7AB648"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-light"
+        android:letterSpacing="0.1" />
+
+    <TextView
+        android:id="@+id/breathCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/breatheLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:text=""
+        android:textColor="#AAAAAA"
+        android:textSize="13sp"
+        android:fontFamily="sans-serif-light" />
+
+    <!-- Live metrics cards -->
+    <LinearLayout
+        android:id="@+id/metricsRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/breathCount"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/card_pulse"
+            android:padding="14dp"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="&#x2764;" android:textSize="18sp"/>
+            <TextView android:id="@+id/livePulse" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                android:text="--" android:textColor="#FFFFFF" android:textSize="28sp"
+                android:textStyle="bold" android:fontFamily="sans-serif-medium"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="bpm" android:textColor="#EECCCC" android:textSize="11sp"
+                android:fontFamily="sans-serif-light"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/card_breathing"
+            android:padding="14dp"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="&#x1F32C;" android:textSize="18sp"/>
+            <TextView android:id="@+id/liveBreathing" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginTop="2dp"
+                android:text="--" android:textColor="#FFFFFF" android:textSize="28sp"
+                android:textStyle="bold" android:fontFamily="sans-serif-medium"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="br/min" android:textColor="#CCDDEE" android:textSize="11sp"
+                android:fontFamily="sans-serif-light"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Results overlay -->
+    <LinearLayout
+        android:id="@+id/resultsOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="#F5F0EB"
+        android:padding="28dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="40dp">
+            <LinearLayout android:layout_width="44dp" android:layout_height="44dp"
+                android:background="@drawable/logo_bg" android:gravity="center">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="◠" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold"/>
+            </LinearLayout>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginStart="10dp" android:text="calmify" android:textColor="#333333"
+                android:textSize="26sp" android:fontFamily="sans-serif-light"/>
+        </LinearLayout>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="28dp" android:text="you did it!"
+            android:textColor="#7ab648" android:textSize="26sp" android:fontFamily="sans-serif-light"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="6dp" android:text="here's how you improved"
+            android:textColor="#AAAAAA" android:textSize="14sp" android:fontFamily="sans-serif-light"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="24dp" android:text="before" android:textColor="#d4726a"
+            android:textSize="13sp" android:fontFamily="sans-serif-light" android:letterSpacing="0.2"/>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginTop="6dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginEnd="6dp"
+                android:background="@drawable/card_pulse" android:padding="12dp"
+                android:gravity="center" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="&#x2764;" android:textSize="14sp"/>
+                <TextView android:id="@+id/beforePulse" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="--" android:textColor="#FFFFFF"
+                    android:textSize="26sp" android:textStyle="bold"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="bpm" android:textColor="#EECCCC" android:textSize="10sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginStart="6dp"
+                android:background="@drawable/card_breathing" android:padding="12dp"
+                android:gravity="center" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="&#x1F32C;" android:textSize="14sp"/>
+                <TextView android:id="@+id/beforeBreathing" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="--" android:textColor="#FFFFFF"
+                    android:textSize="26sp" android:textStyle="bold"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="br/min" android:textColor="#CCDDEE" android:textSize="10sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" android:text="after" android:textColor="#7ab648"
+            android:textSize="13sp" android:fontFamily="sans-serif-light" android:letterSpacing="0.2"/>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginTop="6dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginEnd="6dp"
+                android:background="@drawable/card_pulse" android:padding="12dp"
+                android:gravity="center" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="&#x2764;" android:textSize="14sp"/>
+                <TextView android:id="@+id/afterPulse" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="--" android:textColor="#FFFFFF"
+                    android:textSize="26sp" android:textStyle="bold"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="bpm" android:textColor="#EECCCC" android:textSize="10sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginStart="6dp"
+                android:background="@drawable/card_breathing" android:padding="12dp"
+                android:gravity="center" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="&#x1F32C;" android:textSize="14sp"/>
+                <TextView android:id="@+id/afterBreathing" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="--" android:textColor="#FFFFFF"
+                    android:textSize="26sp" android:textStyle="bold"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="br/min" android:textColor="#CCDDEE" android:textSize="10sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" android:text="you're doing great. keep it up."
+            android:textColor="#b0b0b0" android:textSize="14sp" android:fontFamily="sans-serif-light"
+            android:fontStyle="italic"/>
+
+        <Button android:id="@+id/doneButton" android:layout_width="200dp" android:layout_height="48dp"
+            android:layout_marginTop="20dp" android:backgroundTint="#cec3d8"
+            android:text="i feel better" android:textAllCaps="false" android:textColor="#FFFFFF"
+            android:textSize="15sp" android:fontFamily="sans-serif-light"/>
+    </LinearLayout>
+
+</RelativeLayout>

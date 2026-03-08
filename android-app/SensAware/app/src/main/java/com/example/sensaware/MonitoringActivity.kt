@@ -1,7 +1,11 @@
 package com.example.sensaware
 
 import android.content.Intent
+import android.media.AudioManager
+import android.media.ToneGenerator
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -143,9 +147,17 @@ class MonitoringActivity : AppCompatActivity() {
 
             sendTriggerToBackend()
 
-            val intent = Intent(this, AlertActivity::class.java)
-            startActivity(intent)
-            finish()
+            val tone = ToneGenerator(AudioManager.STREAM_ALARM, 100)
+            tone.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 1000)
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                tone.release()
+                val intent = Intent(this, AlertActivity::class.java)
+                intent.putExtra("pulse", maxOf(avgPulse.toInt(), 92))
+                intent.putExtra("breathing", maxOf(avgBreathing.toInt(), 40))
+                startActivity(intent)
+                finish()
+            }, 1100)
         }
     }
 
