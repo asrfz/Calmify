@@ -22,15 +22,29 @@ class MonitoringActivity : AppCompatActivity() {
     private lateinit var smartSpectraView: SmartSpectraView
     private val client = OkHttpClient()
 
-    private val backendUrl = "http://192.168.1.23:5000/trigger"   // CHANGE THIS
-    private val apiKey = "YOUR_API_KEY"                           // CHANGE THIS
+    private val backendUrl = "http://10.200.10.34:5000/trigger"   // CHANGE
+    private val apiKey = "2BwfYdU0gG7QXEEi8wIwD1FUgpUWhd3y5A30zGb8"                           // CHANGE
 
     private var isMonitoring = true
     private var thresholdTriggered = false
 
-    // demo-friendly thresholds
-    private val pulseThreshold = 90f
-    private val breathingThreshold = 18f
+    // Baseline collection
+    private val baselinePulseValues = mutableListOf<Float>()
+    private val baselineBreathingValues = mutableListOf<Float>()
+    private var baselineReady = false
+    private val baselineSamplesNeeded = 8
+
+    // Rolling smoothing
+    private val pulseHistory = mutableListOf<Float>()
+    private val breathingHistory = mutableListOf<Float>()
+    private val historySize = 5
+
+    // sustained trigger
+    private var elevatedCount = 0
+    private val elevatedCountNeeded = 3
+
+    private var baselinePulse = 0f
+    private var baselineBreathing = 0f
 
     private val smartSpectraSdk = SmartSpectraSdk.getInstance().apply {
         setApiKey(apiKey)
@@ -64,17 +78,68 @@ class MonitoringActivity : AppCompatActivity() {
 
         if (latestPulse == null || latestBreathing == null) return
 
-        Log.d("SensAware", "HR=$latestPulse | BR=$latestBreathing")
+        // 1) collect baseline first
+        if (!baselineReady) {
+            baselinePulseValues.add(latestPulse)
+            baselineBreathingValues.add(latestBreathing)
 
-        val thresholdMet =
-            latestPulse >= pulseThreshold ||
-            latestBreathing >= breathingThreshold
+            Log.d("SensAware", "Collecting baseline... HR=$latestPulse BR=$latestBreathing")
+
+            if (baselinePulseValues.size >= baselineSamplesNeeded &&
+                baselineBreathingValues.size >= baselineSamplesNeeded
+            ) {
+                baselinePulse = baselinePulseValues.average().toFloat()
+                baselineBreathing = baselineBreathingValues.average().toFloat()
+                baselineReady = true
+
+                Log.d(
+                    "SensAware",
+                    "Baseline ready -> HR=$baselinePulse BR=$baselineBreathing"
+                )
+            }
+            return
+        }
+
+        // 2) rolling history for smoothing
+        pulseHistory.add(latestPulse)
+        breathingHistory.add(latestBreathing)
+
+        if (pulseHistory.size > historySize) pulseHistory.removeAt(0)
+        if (breathingHistory.size > historySize) breathingHistory.removeAt(0)
+
+        val avgPulse = pulseHistory.average().toFloat()
+        val avgBreathing = breathingHistory.average().toFloat()
+
+        val pulseDelta = avgPulse - baselinePulse
+        val breathingDelta = avgBreathing - baselineBreathing
+
+        Log.d(
+            "SensAware",
+            "Avg HR=$avgPulse (Δ $pulseDelta) | Avg BR=$avgBreathing (Δ $breathingDelta)"
+        )
+
+        // 3) smarter trigger
+        // Demo-friendly:
+        // pulse needs to rise ~8 bpm above baseline
+        // breathing needs to rise ~3.5 above baseline
+        val pulseElevated = pulseDelta >= 8f
+        val breathingElevated = breathingDelta >= 3.5f
+
+        val elevatedNow = pulseElevated || breathingElevated
+
+        if (elevatedNow) {
+            elevatedCount += 1
+        } else {
+            elevatedCount = 0
+        }
+
+        val thresholdMet = elevatedCount >= elevatedCountNeeded
 
         if (thresholdMet && !thresholdTriggered) {
             thresholdTriggered = true
             isMonitoring = false
 
-            Log.d("SensAware", "TRIGGERED")
+            Log.d("SensAware", "TRIGGERED -> sustained elevation detected")
 
             sendTriggerToBackend()
 

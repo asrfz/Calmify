@@ -13,7 +13,6 @@
         android:theme="@style/Theme.SensAware">
 
         <activity android:name=".AlertActivity" />
-
         <activity android:name=".MonitoringActivity" />
 
         <activity
