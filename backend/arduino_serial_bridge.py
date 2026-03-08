@@ -1,7 +1,7 @@
 import serial
 import requests
 
-SERIAL_PORT = "COM3"   # CHANGE THIS
+SERIAL_PORT = "COM4"   # CHANGE THIS
 BAUD_RATE = 115200
 
 FLASK_URL = "http://127.0.0.1:5000/arduino-trigger"

@@ -6,7 +6,7 @@ app = Flask(__name__)
 session = {
     "state": "idle",
     "grip_count": 0,
-    "grip_needed": 10,
+    "grip_needed": 14,
     "triggered_at": None,
 }
 
