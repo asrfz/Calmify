@@ -2,8 +2,11 @@ import requests
 import os
 import time
 import threading
+from dotenv import load_dotenv
 
-ELEVENLABS_API_KEY = "sk_4d6fe7a3125b39d2e6fe0f5e669bb55cab98d932c4ba286e"
+load_dotenv()
+
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # "Rachel" — calm, warm voice
 
 AUDIO_DIR = os.path.join(os.path.dirname(__file__), "audio_cache")

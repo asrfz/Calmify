@@ -1,0 +1,10 @@
+.env
+backend/.env
+backend/audio_cache/
+__pycache__/
+*.pyc
+.idea/
+*.iml
+.gradle/
+build/
+local.properties

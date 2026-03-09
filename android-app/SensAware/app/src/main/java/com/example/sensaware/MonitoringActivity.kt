@@ -26,8 +26,8 @@ class MonitoringActivity : AppCompatActivity() {
     private lateinit var smartSpectraView: SmartSpectraView
     private val client = OkHttpClient()
 
-    private val backendUrl = "http://172.20.10.2:5000/trigger"   // CHANGE
-    private val apiKey = "2BwfYdU0gG7QXEEi8wIwD1FUgpUWhd3y5A30zGb8"                           // CHANGE
+    private val backendUrl = "http://172.20.10.2:5000/trigger"   // CHANGE to your laptop's IP
+    private val apiKey = "YOUR_PRESAGE_API_KEY"                                              // CHANGE to your Presage key
 
     private var isMonitoring = true
     private var thresholdTriggered = false

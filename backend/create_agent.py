@@ -1,7 +1,11 @@
 import requests
 import json
+import os
+from dotenv import load_dotenv
 
-API_KEY = "sk_4d6fe7a3125b39d2e6fe0f5e669bb55cab98d932c4ba286e"
+load_dotenv()
+
+API_KEY = os.getenv("ELEVENLABS_API_KEY")
 
 payload = {
     "name": "Calmify Companion",
