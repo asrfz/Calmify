@@ -145,7 +145,10 @@ class MonitoringActivity : AppCompatActivity() {
 
             Log.d("SensAware", "TRIGGERED -> sustained elevation detected")
 
-            sendTriggerToBackend()
+            val finalPulse = maxOf(avgPulse.toInt(), 92)
+            val finalBreathing = maxOf(avgBreathing.toInt(), 40)
+
+            sendTriggerToBackend(finalPulse, finalBreathing)
 
             val tone = ToneGenerator(AudioManager.STREAM_ALARM, 100)
             tone.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 1000)
@@ -153,19 +156,21 @@ class MonitoringActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 tone.release()
                 val intent = Intent(this, AlertActivity::class.java)
-                intent.putExtra("pulse", maxOf(avgPulse.toInt(), 92))
-                intent.putExtra("breathing", maxOf(avgBreathing.toInt(), 40))
+                intent.putExtra("pulse", finalPulse)
+                intent.putExtra("breathing", finalBreathing)
                 startActivity(intent)
                 finish()
             }, 1100)
         }
     }
 
-    private fun sendTriggerToBackend() {
+    private fun sendTriggerToBackend(pulse: Int, breathing: Int) {
         thread {
             try {
                 val json = JSONObject().apply {
                     put("triggered", true)
+                    put("pulse", pulse)
+                    put("breathing", breathing)
                 }
 
                 val body = json.toString()
