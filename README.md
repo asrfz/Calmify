@@ -1,6 +1,6 @@
 # Calmify
 
-A real-time overstimulation detection and calming system for children with autism. Calmify uses contactless camera-based biometrics to detect stress, triggers a physical grounding exercise through an Arduino-powered squeeze toy, and guides the child through AI-driven recovery — all without wearables or physical contact.
+A real-time overstimulation detection and calming system for children with autism. Calmify uses contactless camera-based biometrics to detect stress, triggers a physical grounding exercise through an Arduino-powered squeeze toy, and guides the child through AI-driven recovery...all without wearables or physical contact.
 
 [![Demo Video](https://img.youtube.com/vi/ecAcwc9Jw2c/maxresdefault.jpg)](https://www.youtube.com/watch?v=ecAcwc9Jw2c&t=310s)
 
